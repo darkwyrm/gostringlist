@@ -117,3 +117,25 @@ func (list StringList) MatchFilter(pattern string) (StringList, error) {
 
 	return newList, nil
 }
+
+// Copy creates a duplicate of the existing object
+func (list StringList) Copy() StringList {
+	var newList StringList
+	copy(newList.Items, list.Items)
+	return newList
+}
+
+// IsEqual returns true if the current object's items match exactly those of the passed StringList.
+func (list StringList) IsEqual(list2 StringList) bool {
+	if len(list.Items) != len(list2.Items) {
+		return false
+	}
+
+	for i := range list.Items {
+		if list.Items[i] != list2.Items[i] {
+			return false
+		}
+	}
+
+	return true
+}
