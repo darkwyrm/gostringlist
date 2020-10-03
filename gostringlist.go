@@ -6,6 +6,7 @@
 package gostringlist
 
 import (
+	"errors"
 	"regexp"
 	"sort"
 	"strings"
@@ -50,6 +51,20 @@ func (list StringList) IndexOf(str string) int {
 	return -1
 }
 
+// ToString converts the list to a string conveying its contents
+func (list StringList) ToString() string {
+	parts := make([]string, (len(list.Items)*2)+1)
+	parts[0] = "["
+	partsIndex := 1
+	for _, v := range list.Items {
+		parts[partsIndex] = "\"" + v + "\""
+		parts[partsIndex+1] = ","
+		partsIndex += 2
+	}
+	parts[len(parts)-1] = "]"
+	return strings.Join(parts, "")
+}
+
 // Contains returns true if the list contains an exact match of the specified string
 func (list StringList) Contains(str string) bool {
 	for _, v := range list.Items {
@@ -64,10 +79,15 @@ func (list StringList) Contains(str string) bool {
 // method performs some memory reallocations and copying as needed in order to provide convenience.
 // As such, it is expensive, and if you need to do a lot of insertions, a task-specific
 // implementation will perform better.
-func (list StringList) Insert(str string, index int) {
+func (list StringList) Insert(str string, index int) error {
+	if index < 0 || index > len(list.Items) {
+		return errors.New("index out of range")
+	}
 	list.Items = append(list.Items, str)
 	copy(list.Items[index:], list.Items[index+1:])
 	list.Items[index] = str
+
+	return nil
 }
 
 // Remove deletes the string from the list. This method removes the item by copying each element
