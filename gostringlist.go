@@ -79,12 +79,12 @@ func (list StringList) Contains(str string) bool {
 // method performs some memory reallocations and copying as needed in order to provide convenience.
 // As such, it is expensive, and if you need to do a lot of insertions, a task-specific
 // implementation will perform better.
-func (list StringList) Insert(str string, index int) error {
+func (list *StringList) Insert(str string, index int) error {
 	if index < 0 || index > len(list.Items) {
 		return errors.New("index out of range")
 	}
 	list.Items = append(list.Items, str)
-	copy(list.Items[index:], list.Items[index+1:])
+	copy(list.Items[index+1:], list.Items[index:])
 	list.Items[index] = str
 
 	return nil
@@ -94,7 +94,7 @@ func (list StringList) Insert(str string, index int) error {
 // after the one deleted to the slot before it, which is the method recommended from The Go
 // Programming Language. Speed is sacrificed for the sake of convenience. If you intend to do a lot
 // of removal, you are better off implementing a task-specific version.
-func (list StringList) Remove(str string) {
+func (list *StringList) Remove(str string) {
 	index := list.IndexOf(str)
 	if index < 0 {
 		return
@@ -107,7 +107,7 @@ func (list StringList) Remove(str string) {
 // RemoveUnordered deletes the string from the list like Remove(), but it rearranges the items for
 // the sake of speed. If the order of the list items doesn't matter, this method should be
 // preferred over Remove()
-func (list StringList) RemoveUnordered(str string) {
+func (list *StringList) RemoveUnordered(str string) {
 	index := list.IndexOf(str)
 	if index < 0 {
 		return
@@ -119,7 +119,7 @@ func (list StringList) RemoveUnordered(str string) {
 }
 
 // Sort - sorts the list in ascending alphabetical order
-func (list StringList) Sort() {
+func (list *StringList) Sort() {
 	sort.Strings(list.Items)
 }
 
@@ -130,7 +130,7 @@ func (list StringList) Join(sep string) string {
 
 // Split - convenience function which sets the object's contents to the results of splitting the
 // supplied string with the separator string
-func (list StringList) Split(str string, sep string) {
+func (list *StringList) Split(str string, sep string) {
 	list.Items = strings.Split(str, sep)
 }
 
