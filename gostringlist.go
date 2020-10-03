@@ -179,7 +179,7 @@ func (list StringList) MatchFilter(pattern string) (StringList, error) {
 
 // ReplaceAllFilter returns a new StringList containing all the items in the list which match the
 // supplied regular expression
-func (list StringList) ReplaceAllFilter(pattern string) (StringList, error) {
+func (list StringList) ReplaceAllFilter(pattern string, repl string) (StringList, error) {
 	var newList StringList
 	newList.Items = make([]string, 0, len(list.Items))
 
@@ -188,7 +188,7 @@ func (list StringList) ReplaceAllFilter(pattern string) (StringList, error) {
 		return newList, err
 	}
 	for i := range list.Items {
-		newString := re.ReplaceAllString(list.Items[i], pattern)
+		newString := re.ReplaceAllString(list.Items[i], repl)
 		newList.Items = append(newList.Items, newString)
 	}
 
