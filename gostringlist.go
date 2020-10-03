@@ -139,3 +139,21 @@ func (list StringList) MatchFilter(pattern string) (StringList, error) {
 
 	return newList, nil
 }
+
+// ReplaceAllFilter returns a new StringList containing all the items in the list which match the
+// supplied regular expression
+func (list StringList) ReplaceAllFilter(pattern string) (StringList, error) {
+	var newList StringList
+	newList.Items = make([]string, 0, len(list.Items))
+
+	re, err := regexp.Compile(pattern)
+	if err != nil {
+		return newList, err
+	}
+	for i := range list.Items {
+		newString := re.ReplaceAllString(list.Items[i], pattern)
+		newList.Items = append(newList.Items, newString)
+	}
+
+	return newList, nil
+}
