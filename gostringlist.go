@@ -8,6 +8,7 @@ package gostringlist
 import (
 	"regexp"
 	"sort"
+	"strings"
 )
 
 // StringList - a class for managing and manipulating lists of strings. It stores the items
@@ -100,6 +101,17 @@ func (list StringList) RemoveUnordered(str string) {
 // Sort - sorts the list in ascending alphabetical order
 func (list StringList) Sort() {
 	sort.Strings(list.Items)
+}
+
+// Join - convenience function to return all items joined by the specified character
+func (list StringList) Join(sep string) string {
+	return strings.Join(list.Items, sep)
+}
+
+// Split - convenience function which sets the object's contents to the results of splitting the
+// supplied string with the separator string
+func (list StringList) Split(str string, sep string) {
+	list.Items = strings.Split(str, sep)
 }
 
 // Filter is a generic interface to creating new StringLists from the original, similar to Python's
