@@ -40,6 +40,11 @@ func (list StringList) IsEqual(list2 StringList) bool {
 	return true
 }
 
+// IsEmpty returns true if the object contains no items.
+func (list StringList) IsEmpty() bool {
+	return len(list.Items) == 0
+}
+
 // IndexOf returns the index of item if the list contains an exact match of the specified string
 // or -1 if not found
 func (list StringList) IndexOf(str string) int {
@@ -156,16 +161,16 @@ func (list StringList) Filter(op func(int, []string) (bool, string)) StringList 
 // supplied regular expression
 func (list StringList) MatchFilter(pattern string) (StringList, error) {
 	var newList StringList
+	re, err := regexp.Compile(pattern)
+	if err != nil {
+		return newList, err
+	}
+
 	newList.Items = make([]string, 0, len(list.Items))
-	for i := range list.Items {
-		match, err := regexp.MatchString(pattern, list.Items[i])
 
-		if err != nil {
-			return newList, err
-		}
-
-		if match {
-			newList.Items = append(newList.Items, list.Items[i])
+	for _, item := range list.Items {
+		if re.MatchString(item) {
+			newList.Items = append(newList.Items, item)
 		}
 	}
 
