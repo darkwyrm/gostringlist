@@ -16,14 +16,26 @@ type StringList struct {
 	Items []string
 }
 
-// Contains returns true if the list contains an exact match of the specified string
-func (list StringList) Contains(str string) bool {
-	for _, v := range list.Items {
-		if str == v {
-			return true
+// Copy creates a duplicate of the existing object
+func (list StringList) Copy() StringList {
+	var newList StringList
+	copy(newList.Items, list.Items)
+	return newList
+}
+
+// IsEqual returns true if the current object's items match exactly those of the passed StringList.
+func (list StringList) IsEqual(list2 StringList) bool {
+	if len(list.Items) != len(list2.Items) {
+		return false
+	}
+
+	for i := range list.Items {
+		if list.Items[i] != list2.Items[i] {
+			return false
 		}
 	}
-	return false
+
+	return true
 }
 
 // IndexOf returns the index of item if the list contains an exact match of the specified string
@@ -35,6 +47,26 @@ func (list StringList) IndexOf(str string) int {
 		}
 	}
 	return -1
+}
+
+// Contains returns true if the list contains an exact match of the specified string
+func (list StringList) Contains(str string) bool {
+	for _, v := range list.Items {
+		if str == v {
+			return true
+		}
+	}
+	return false
+}
+
+// Insert inserts the specified string into the list at the specified index. Like Remove(), this
+// method performs some memory reallocations and copying as needed in order to provide convenience.
+// As such, it is expensive, and if you need to do a lot of insertions, a task-specific
+// implementation will perform better.
+func (list StringList) Insert(str string, index int) {
+	list.Items = append(list.Items, str)
+	copy(list.Items[index:], list.Items[index+1:])
+	list.Items[index] = str
 }
 
 // Remove deletes the string from the list. This method removes the item by copying each element
@@ -63,16 +95,6 @@ func (list StringList) RemoveUnordered(str string) {
 	length := len(list.Items)
 	list.Items[index] = list.Items[length-1]
 	list.Items = list.Items[:length-1]
-}
-
-// Insert inserts the specified string into the list at the specified index. Like Remove(), this
-// method performs some memory reallocations and copying as needed in order to provide convenience.
-// As such, it is expensive, and if you need to do a lot of insertions, a task-specific
-// implementation will perform better.
-func (list StringList) Insert(str string, index int) {
-	list.Items = append(list.Items, str)
-	copy(list.Items[index:], list.Items[index+1:])
-	list.Items[index] = str
 }
 
 // Sort - sorts the list in ascending alphabetical order
@@ -116,26 +138,4 @@ func (list StringList) MatchFilter(pattern string) (StringList, error) {
 	}
 
 	return newList, nil
-}
-
-// Copy creates a duplicate of the existing object
-func (list StringList) Copy() StringList {
-	var newList StringList
-	copy(newList.Items, list.Items)
-	return newList
-}
-
-// IsEqual returns true if the current object's items match exactly those of the passed StringList.
-func (list StringList) IsEqual(list2 StringList) bool {
-	if len(list.Items) != len(list2.Items) {
-		return false
-	}
-
-	for i := range list.Items {
-		if list.Items[i] != list2.Items[i] {
-			return false
-		}
-	}
-
-	return true
 }
