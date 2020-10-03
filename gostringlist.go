@@ -5,7 +5,10 @@
 // Released under the MIT License
 package gostringlist
 
-import "sort"
+import (
+	"regexp"
+	"sort"
+)
 
 // StringList - a class for managing and manipulating lists of strings. It stores the items
 // internally as a slice, so memory management caveats apply.
@@ -93,4 +96,24 @@ func (list StringList) Filter(op func(int, []string) (bool, string)) StringList 
 	}
 
 	return newList
+}
+
+// MatchFilter returns a new StringList containing all the items in the list which match the
+// supplied regular expression
+func (list StringList) MatchFilter(pattern string) (StringList, error) {
+	var newList StringList
+	newList.Items = make([]string, 0, len(list.Items))
+	for i := range list.Items {
+		match, err := regexp.MatchString(pattern, list.Items[i])
+
+		if err != nil {
+			return newList, err
+		}
+
+		if match {
+			newList.Items = append(newList.Items, list.Items[i])
+		}
+	}
+
+	return newList, nil
 }
