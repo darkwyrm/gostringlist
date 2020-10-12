@@ -19,7 +19,7 @@ type StringList struct {
 }
 
 // Append appends a string to the list
-func (list StringList) Append(str string) {
+func (list *StringList) Append(str string) {
 	list.Items = append(list.Items, str)
 }
 
