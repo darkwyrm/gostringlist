@@ -18,6 +18,11 @@ type StringList struct {
 	Items []string
 }
 
+// Append appends a string to the list
+func (list StringList) Append(str string) {
+	list.Items = append(list.Items, str)
+}
+
 // Copy creates a duplicate of the existing object
 func (list StringList) Copy() StringList {
 	var newList StringList
