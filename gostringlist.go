@@ -18,6 +18,13 @@ type StringList struct {
 	Items []string
 }
 
+// New creates a new empty list
+func New() *StringList {
+	var newList StringList
+	newList.Items = make([]string, 0)
+	return &newList
+}
+
 // Copy creates a duplicate of the existing object
 func (list StringList) Copy() StringList {
 	var newList StringList
