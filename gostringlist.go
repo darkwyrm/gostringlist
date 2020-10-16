@@ -23,6 +23,10 @@ func New() *StringList {
 	var newList StringList
 	newList.Items = make([]string, 0)
 	return &newList
+
+// Append appends a string to the list
+func (list *StringList) Append(str string) {
+	list.Items = append(list.Items, str)
 }
 
 // Copy creates a duplicate of the existing object
