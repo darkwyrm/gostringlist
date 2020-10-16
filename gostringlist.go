@@ -140,12 +140,6 @@ func (list StringList) Join(sep string) string {
 	return strings.Join(list.Items, sep)
 }
 
-// Split - convenience function which sets the object's contents to the results of splitting the
-// supplied string with the separator string
-func (list *StringList) Split(str string, sep string) {
-	list.Items = strings.Split(str, sep)
-}
-
 // Filter is a generic interface to creating new StringLists from the original, similar to Python's
 // list comprehensions. It takes a pointer to a filter function. The filter function is passed
 // an index to the current item and the slice of strings to be used as the source. It is expected
